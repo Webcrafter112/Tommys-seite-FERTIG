@@ -748,11 +748,310 @@
     .about-stats { gap: 2rem; }
     .hero-tags { gap: 0.5rem; }
   }
+
+  /* ═══════════════════════════════════════════════════
+     PREMIUM LAYER — Awwwards-grade polish
+     ═══════════════════════════════════════════════════ */
+
+  :root {
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --glow-gold: rgba(200,150,60,0.35);
+    --glow-red: rgba(156,90,42,0.45);
+    --space-section: clamp(5rem, 11vw, 9rem);
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    letter-spacing: 0.01em;
+  }
+  ::selection { background: var(--red); color: var(--white); }
+
+  /* Touch devices: restore native cursor, hide custom one */
+  @media (hover: none), (pointer: coarse) {
+    * { cursor: auto !important; }
+    #cursor { display: none !important; }
+  }
+
+  /* Film grain — premium texture */
+  .grain {
+    position: fixed; inset: 0; z-index: 9000;
+    pointer-events: none; opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* Scroll progress bar */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 0;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    box-shadow: 0 0 14px var(--glow-gold);
+    z-index: 200;
+  }
+
+  /* Reveal-on-scroll system */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(38px);
+    filter: blur(8px);
+    transition:
+      opacity 1.1s var(--ease-out),
+      transform 1.1s var(--ease-out),
+      filter 1.1s var(--ease-out);
+    transition-delay: var(--rd, 0s);
+    will-change: opacity, transform;
+  }
+  [data-reveal].in { opacity: 1; transform: none; filter: blur(0); }
+
+  /* Nav: glass when scrolled */
+  nav.scrolled {
+    background: rgba(16,12,8,0.72);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-bottom: 1px solid rgba(200,150,60,0.14);
+    padding-top: 1.05rem; padding-bottom: 1.05rem;
+  }
+  nav { transition: background 0.5s var(--ease), padding 0.5s var(--ease), border-color 0.5s; }
+
+  /* Live open/closed pill */
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    padding: 0.4rem 1rem 0.4rem 0.85rem;
+    border: 1px solid rgba(200,150,60,0.3);
+    border-radius: 999px;
+    background: rgba(16,12,8,0.4);
+    backdrop-filter: blur(8px);
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    font-weight: 600; color: var(--cream);
+    margin-bottom: 1.8rem;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #5fbf6a; box-shadow: 0 0 0 0 rgba(95,191,106,0.6);
+    animation: pulseDot 2.4s var(--ease) infinite;
+  }
+  .status-dot.closed { background: var(--red-light); animation: none; box-shadow: none; }
+  @keyframes pulseDot {
+    0% { box-shadow: 0 0 0 0 rgba(95,191,106,0.55); }
+    70% { box-shadow: 0 0 0 9px rgba(95,191,106,0); }
+    100% { box-shadow: 0 0 0 0 rgba(95,191,106,0); }
+  }
+
+  /* Hamburger + mobile menu */
+  .nav-burger {
+    display: none;
+    width: 42px; height: 42px;
+    background: none; border: 1px solid rgba(200,150,60,0.25);
+    border-radius: 8px;
+    position: relative; z-index: 130;
+  }
+  .nav-burger span {
+    position: absolute; left: 11px; right: 11px; height: 1.5px;
+    background: var(--cream); transition: transform 0.4s var(--ease), opacity 0.3s;
+  }
+  .nav-burger span:nth-child(1) { top: 15px; }
+  .nav-burger span:nth-child(2) { top: 21px; }
+  .nav-burger span:nth-child(3) { top: 27px; }
+  body.menu-open .nav-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  body.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
+  body.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 120;
+    background: linear-gradient(160deg, #140f0a, #0c0905);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0.4rem;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.5s var(--ease), visibility 0.5s;
+  }
+  body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
+  .mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 9vw, 3rem); font-weight: 700;
+    color: var(--cream); text-decoration: none;
+    padding: 0.4rem 0; letter-spacing: 0.01em;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), color 0.3s;
+  }
+  body.menu-open .mobile-menu a { opacity: 1; transform: none; }
+  .mobile-menu a:nth-child(1) { transition-delay: 0.10s; }
+  .mobile-menu a:nth-child(2) { transition-delay: 0.16s; }
+  .mobile-menu a:nth-child(3) { transition-delay: 0.22s; }
+  .mobile-menu a:nth-child(4) { transition-delay: 0.28s; }
+  .mobile-menu a:active, .mobile-menu a:hover { color: var(--gold); }
+  .mobile-menu .mm-reserve {
+    margin-top: 1.6rem; font-family: 'Barlow', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 600; color: var(--white);
+    background: var(--red); padding: 1rem 2.6rem; border-radius: 4px;
+    transition-delay: 0.34s;
+  }
+
+  /* HERO — layered depth */
+  .hero-glow {
+    position: absolute; z-index: 1;
+    border-radius: 50%; filter: blur(90px);
+    pointer-events: none; mix-blend-mode: screen; opacity: 0.55;
+  }
+  .hero-glow--1 {
+    width: 46vw; height: 46vw; max-width: 560px; max-height: 560px;
+    top: 6%; left: -6%;
+    background: radial-gradient(circle, var(--glow-red), transparent 68%);
+    animation: floatGlow 16s var(--ease) infinite alternate;
+  }
+  .hero-glow--2 {
+    width: 48vw; height: 48vw; max-width: 600px; max-height: 600px;
+    bottom: -8%; right: -6%;
+    background: radial-gradient(circle, var(--glow-gold), transparent 68%);
+    animation: floatGlow 21s var(--ease) infinite alternate-reverse;
+  }
+  @keyframes floatGlow {
+    from { transform: translate(0,0) scale(1); }
+    to   { transform: translate(40px,-34px) scale(1.18); }
+  }
+  /* bottom fade into next section */
+  .hero::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22vh;
+    z-index: 2; pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--black));
+  }
+  .hero-content { z-index: 3; }
+  .hero-spline { z-index: 1; }
+  .hero-overlay { z-index: 1; }
+  .particles { z-index: 2; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 28px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .hero-eyebrow::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
+  .hero-title { text-shadow: 0 8px 40px rgba(0,0,0,0.45); }
+  .hero-title .accent {
+    background: linear-gradient(115deg, var(--red-light) 10%, var(--gold) 90%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    font-style: italic;
+  }
+
+  /* Section label decorator + index */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before {
+    content: ''; width: 30px; height: 1px; background: var(--red);
+    display: inline-block;
+  }
+
+  /* Refined buttons — depth, glow, shimmer */
+  .btn-primary {
+    border-radius: 4px;
+    box-shadow: 0 14px 36px -16px var(--glow-red);
+    will-change: transform;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), color 0.3s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 50px -18px var(--glow-red);
+  }
+  .btn-primary::after {
+    content: ''; position: absolute; top: 0; left: -120%;
+    width: 60%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.28), transparent);
+    transform: skewX(-18deg); transition: left 0.7s var(--ease);
+  }
+  .btn-primary:hover::after { left: 140%; }
+  .btn-outline { border-radius: 4px; transition: all 0.35s var(--ease); }
+  .btn-outline:hover { transform: translateY(-3px); }
+
+  /* Specialty cards — depth on hover */
+  .specialty-card {
+    transition: background 0.45s var(--ease), transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+  }
+  .specialty-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 60px -28px rgba(0,0,0,0.8);
+    z-index: 2;
+  }
+  .specialty-icon { transition: transform 0.45s var(--ease); display: inline-block; }
+  .specialty-card:hover .specialty-icon { transform: scale(1.16) translateY(-4px); }
+
+  /* Menu items — refined */
+  .menu-item { transition: background 0.35s var(--ease), transform 0.3s var(--ease); }
+  .menu-item:hover { transform: translateX(6px); }
+  .menu-item-price { transition: transform 0.3s var(--ease), color 0.3s; }
+  .menu-item:hover .menu-item-price { transform: scale(1.08); color: var(--red-light); }
+  .menu-tab { transition: all 0.35s var(--ease); }
+
+  /* Featured — luxe */
+  .featured-section { box-shadow: inset 0 0 140px rgba(0,0,0,0.45); }
+  .featured-section .featured-glow {
+    position: absolute; width: 60%; height: 200%; left: 50%; top: 50%;
+    transform: translate(-50%,-50%); pointer-events: none;
+    background: radial-gradient(ellipse, rgba(255,200,120,0.18), transparent 60%);
+  }
+  .featured-cta {
+    border-radius: 4px;
+    box-shadow: 0 16px 40px -18px rgba(0,0,0,0.6);
+    transition: transform 0.35s var(--ease), background 0.3s, color 0.3s, box-shadow 0.35s;
+  }
+  .featured-cta:hover { transform: translateY(-3px); }
+
+  /* Stat numbers glow */
+  .stat-num { text-shadow: 0 0 30px rgba(156,90,42,0.25); }
+
+  /* Floating mobile reserve */
+  .float-call {
+    position: fixed; right: 1.1rem; bottom: 1.1rem; z-index: 110;
+    display: none; align-items: center; gap: 0.6rem;
+    background: var(--red); color: var(--white);
+    padding: 0.95rem 1.4rem; border-radius: 999px;
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 12px 34px -10px rgba(0,0,0,0.7);
+    transform: translateY(120%); transition: transform 0.5s var(--ease);
+  }
+  .float-call.show { transform: translateY(0); }
+
+  /* Generous, professional section rhythm */
+  section { padding: var(--space-section) 4rem; }
+  .specialties-header { margin-bottom: clamp(3rem, 6vw, 5rem); }
+
+  @media (max-width: 900px) {
+    .nav-burger { display: block; }
+    nav { padding: 1.1rem 1.5rem; }
+    .float-call { display: inline-flex; }
+    section { padding: clamp(4rem, 12vw, 6rem) 1.5rem; }
+    .hero-glow { opacity: 0.4; filter: blur(70px); }
+    .featured-section::before { font-size: 30vw; }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
+  }
 </style>
 </head>
 <body>
 
 <div id="cursor"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<a href="tel:068023272290" class="float-call" id="floatCall" aria-label="Anrufen & reservieren">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+  Reservieren
+</a>
 
 <!-- NAV -->
 <nav id="navbar">
@@ -764,7 +1063,19 @@
     <li><a href="#map">Anfahrt</a></li>
     <li><a href="tel:068023272290" class="nav-reserve">Reservieren</a></li>
   </ul>
+  <button class="nav-burger" id="navBurger" aria-label="Menü öffnen" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">Über uns</a>
+  <a href="#menu">Speisekarte</a>
+  <a href="#info">Öffnungszeiten</a>
+  <a href="#map">Anfahrt</a>
+  <a href="tel:068023272290" class="mm-reserve">Reservieren</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -777,9 +1088,15 @@
       allow="autoplay; fullscreen"></iframe>
   </div>
   <div class="hero-overlay"></div>
+  <div class="hero-glow hero-glow--1"></div>
+  <div class="hero-glow hero-glow--2"></div>
   <div class="particles" id="particles"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Restaurant · Althofen · Kärnten</p>
+    <span class="status-pill" id="statusPill">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Geöffnet</span>
+    </span>
+    <p class="hero-eyebrow">Althofen · Kärnten</p>
     <h1 class="hero-title">Tommy's<br><span class="accent">Restaurant</span></h1>
     <p class="hero-subtitle">Pizza · Burger · Spareribs · Wings</p>
     <div class="hero-tags">
@@ -838,21 +1155,21 @@
       </div>
     </div>
     <div class="about-text">
-      <p class="section-label">Unsere Geschichte</p>
-      <h2 class="section-title" style="margin-bottom:2rem;">Leidenschaft<br>auf dem Teller</h2>
-      <p>Thomas Ferjan und sein Team in Althofen stehen für <strong>echte Handwerksküche</strong> ohne Kompromisse. Jeder Burger wird frisch gebraten, jede Pizza mit Herzblut belegt – und das schmeckt man.</p>
-      <p>Ob ein knuspriger <strong>Crunchy Chicken Burger</strong>, die feurig-scharfen <strong>Spicy Wings</strong> oder eine klassische <strong>Quattro Formaggi</strong> aus dem Ofen – bei Tommy's wird jeder Hunger zur Freude.</p>
-      <div class="about-stats">
+      <p class="section-label" data-reveal>Unsere Geschichte</p>
+      <h2 class="section-title" data-reveal style="margin-bottom:2rem;--rd:.08s;">Leidenschaft<br>auf dem Teller</h2>
+      <p data-reveal style="--rd:.14s;">Thomas Ferjan und sein Team in Althofen stehen für <strong>echte Handwerksküche</strong> ohne Kompromisse. Jeder Burger wird frisch gebraten, jede Pizza mit Herzblut belegt – und das schmeckt man.</p>
+      <p data-reveal style="--rd:.2s;">Ob ein knuspriger <strong>Crunchy Chicken Burger</strong>, die feurig-scharfen <strong>Spicy Wings</strong> oder eine klassische <strong>Quattro Formaggi</strong> aus dem Ofen – bei Tommy's wird jeder Hunger zur Freude.</p>
+      <div class="about-stats" data-reveal style="--rd:.26s;">
         <div>
-          <div class="stat-num">20+</div>
+          <div class="stat-num" data-count="20" data-suffix="+">0</div>
           <div class="stat-label">Pizzasorten</div>
         </div>
         <div>
-          <div class="stat-num">7</div>
+          <div class="stat-num" data-count="7">0</div>
           <div class="stat-label">Burgervarianten</div>
         </div>
         <div>
-          <div class="stat-num">4</div>
+          <div class="stat-num" data-count="4">0</div>
           <div class="stat-label">BBQ-Glazen</div>
         </div>
       </div>
@@ -863,8 +1180,8 @@
 <!-- SPECIALTIES -->
 <section class="specialties-section">
   <div class="specialties-header">
-    <p class="section-label">Was uns ausmacht</p>
-    <h2 class="section-title">Unsere Spezialitäten</h2>
+    <p class="section-label" data-reveal>Was uns ausmacht</p>
+    <h2 class="section-title" data-reveal style="--rd:.08s;">Unsere Spezialitäten</h2>
   </div>
   <div class="specialties-grid">
     <div class="specialty-card">
@@ -892,10 +1209,11 @@
 
 <!-- FEATURED: MONATSBURGER -->
 <div class="featured-section">
-  <p class="featured-label">Monat für Monat neu</p>
-  <h2 class="featured-title">Der Monatsburger</h2>
-  <p class="featured-desc">Jedes Monat kreiert Tommy's einen exklusiven Burger – limitiert, überraschend und immer ein Erlebnis. Komm vorbei, bevor er weg ist.</p>
-  <a href="tel:068023272290" class="featured-cta">Tisch reservieren</a>
+  <div class="featured-glow" aria-hidden="true"></div>
+  <p class="featured-label" data-reveal>Monat für Monat neu</p>
+  <h2 class="featured-title" data-reveal style="--rd:.08s;">Der Monatsburger</h2>
+  <p class="featured-desc" data-reveal style="--rd:.14s;">Jedes Monat kreiert Tommy's einen exklusiven Burger – limitiert, überraschend und immer ein Erlebnis. Komm vorbei, bevor er weg ist.</p>
+  <div data-reveal style="--rd:.2s;"><a href="tel:068023272290" class="featured-cta">Tisch reservieren</a></div>
 </div>
 
 <!-- MENU -->
@@ -903,8 +1221,8 @@
   <div class="menu-section">
     <div class="menu-header">
       <div>
-        <p class="section-label">Was darf es sein?</p>
-        <h2 class="section-title">Speisekarte</h2>
+        <p class="section-label" data-reveal>Was darf es sein?</p>
+        <h2 class="section-title" data-reveal style="--rd:.08s;">Speisekarte</h2>
       </div>
     </div>
 
@@ -987,7 +1305,7 @@
 <!-- HOURS & CONTACT -->
 <section id="info" class="info-section">
   <div class="info-grid">
-    <div>
+    <div data-reveal>
       <p class="section-label">Wann wir da sind</p>
       <h2 class="section-title">Öffnungszeiten</h2>
       <div class="hours-table">
@@ -1013,7 +1331,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div data-reveal style="--rd:.1s;">
       <p class="section-label">Wo wir sind</p>
       <h2 class="section-title">Kontakt &amp; Adresse</h2>
       <div class="contact-info">
@@ -1046,8 +1364,8 @@
 
 <!-- MAP SECTION -->
 <section id="map" style="padding: 0; background: var(--black);">
-  <div style="max-width:1300px; margin: 0 auto; padding: 5rem 4rem; text-align:center;">
-    <p class="section-label">So findest du uns</p>
+  <div style="max-width:1300px; margin: 0 auto; padding: 5rem 4rem; text-align:center;" data-reveal>
+    <p class="section-label" style="justify-content:center;">So findest du uns</p>
     <h2 class="section-title">Anfahrt</h2>
     <p style="color:var(--gray); margin: 1rem 0 2.5rem; font-size:0.95rem; letter-spacing:0.05em;">Kreuzstraße 37 · 9330 Althofen · Kärnten</p>
     <a href="https://www.google.com/maps/dir/?api=1&destination=Kreuzstra%C3%9Fe+37,+9330+Althofen,+%C3%96sterreich" target="_blank" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.6rem; font-size:0.85rem;">
@@ -1069,25 +1387,78 @@
 </footer>
 
 <script>
-  // Custom cursor
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* ── Custom cursor (desktop only) with smooth follow + magnetic ── */
   const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-  document.querySelectorAll('a, button, .menu-item, .specialty-card').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
-  });
+  if (finePointer && !reduceMotion) {
+    let mx = innerWidth / 2, my = innerHeight / 2, cx = mx, cy = my;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    (function loop() {
+      cx += (mx - cx) * 0.18; cy += (my - cy) * 0.18;
+      cursor.style.left = cx + 'px'; cursor.style.top = cy + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a, button, .menu-item, .specialty-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+  } else if (cursor) {
+    cursor.style.display = 'none';
+  }
 
-  // Navbar scroll
-  window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
-  });
+  /* ── Magnetic buttons ── */
+  if (finePointer && !reduceMotion) {
+    document.querySelectorAll('.btn-primary, .featured-cta, .nav-reserve').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${x * 0.25}px, ${y * 0.3 - 3}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+  }
 
-  // Particles
+  /* ── Navbar scroll state + scroll progress ── */
+  const navbar = document.getElementById('navbar');
+  const progress = document.getElementById('scrollProgress');
+  const floatCall = document.getElementById('floatCall');
+  function onScroll() {
+    const y = window.scrollY;
+    navbar.classList.toggle('scrolled', y > 80);
+    const h = document.documentElement.scrollHeight - innerHeight;
+    if (progress) progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    if (floatCall) floatCall.classList.toggle('show', y > innerHeight * 0.6);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── Hero parallax (subtle, rAF-throttled) ── */
+  if (!reduceMotion) {
+    const heroContent = document.querySelector('.hero-content');
+    const heroSpline = document.querySelector('.hero-spline');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y < innerHeight) {
+          if (heroContent) heroContent.style.transform = `translateY(${y * 0.22}px)`;
+          if (heroContent) heroContent.style.opacity = Math.max(0, 1 - y / (innerHeight * 0.75));
+          if (heroSpline) heroSpline.style.transform = `translateY(${y * 0.08}px) scale(${1 + y / 9000})`;
+        }
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ── Particles ── */
   const container = document.getElementById('particles');
-  for (let i = 0; i < 25; i++) {
+  const pCount = innerWidth < 700 ? 12 : 25;
+  for (let i = 0; i < pCount; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.style.cssText = `
@@ -1102,7 +1473,23 @@
     container.appendChild(p);
   }
 
-  // Menu tabs
+  /* ── Mobile menu ── */
+  const burger = document.getElementById('navBurger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded', 'false');
+  }
+  if (burger) {
+    burger.addEventListener('click', () => {
+      const open = document.body.classList.toggle('menu-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    window.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  }
+
+  /* ── Menu tabs ── */
   function showTab(id) {
     document.querySelectorAll('.menu-tab').forEach((t, i) => {
       t.classList.toggle('active', ['pizza','burger','bbq','salate'][i] === id);
@@ -1110,49 +1497,56 @@
     document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('tab-' + id).classList.add('active');
   }
+  window.showTab = showTab;
 
-  // Scroll reveal
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.specialty-card, .menu-item, .hours-row, .contact-item').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
+  /* ── Reveal-on-scroll (data-reveal) + staggered grids ── */
+  // Auto-tag grid children with a stagger delay
+  document.querySelectorAll('.specialty-card, .menu-item, .hours-row, .contact-item').forEach((el, i) => {
+    el.setAttribute('data-reveal', '');
+    el.style.setProperty('--rd', ((i % 8) * 0.05) + 's');
   });
+  const revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+  /* ── Count-up stats ── */
+  function animateCount(el) {
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    if (reduceMotion) { el.textContent = target + suffix; return; }
+    const dur = 1400, start = performance.now();
+    (function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (t < 1) requestAnimationFrame(step);
+    })(start);
+  }
+  const countObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateCount(e.target); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+  /* ── Live open / closed status ── */
+  (function updateStatus() {
+    const dot = document.getElementById('statusDot');
+    const txt = document.getElementById('statusText');
+    if (!dot || !txt) return;
+    const now = new Date();
+    const day = now.getDay(); // 0=Sun ... 6=Sat
+    const mins = now.getHours() * 60 + now.getMinutes();
+    let open = false;
+    if (day >= 4 && day <= 6) open = mins >= 11 * 60 && mins < 22 * 60;       // Thu–Sat 11–22
+    else if (day === 0) open = mins >= 12 * 60 && mins < 20 * 60;             // Sun 12–20
+    // Mon–Wed = Ruhetag
+    if (open) { txt.textContent = 'Jetzt geöffnet'; dot.classList.remove('closed'); }
+    else { txt.textContent = 'Aktuell geschlossen'; dot.classList.add('closed'); }
+  })();
 </script>
-  <script>
-    // Tommy's Restaurant: Kreuzstraße 37, 9330 Althofen
-    var lat = 46.9062, lng = 14.4763;
-
-    var map = L.map('map-leaflet', {
-      center: [lat, lng],
-      zoom: 16,
-      scrollWheelZoom: false
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-
-    var icon = L.divIcon({
-      html: '<div style="background:#9c5a2a;width:18px;height:18px;border-radius:50%;border:3px solid #c8963c;box-shadow:0 0 10px rgba(156,90,42,0.8);"></div>',
-      iconSize: [18, 18],
-      iconAnchor: [9, 9],
-      className: ''
-    });
-
-    L.marker([lat, lng], {icon: icon})
-      .addTo(map)
-      .bindPopup('<b style="font-family:serif;">Tommy's Restaurant</b><br>Kreuzstraße 37<br>9330 Althofen')
-      .openPopup();
-  </script>
 </body>
 </html>
