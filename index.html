@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tommy — Portfolio</title>
+  <meta name="description" content="Tommys persönliche Website mit interaktiver 3D-Animation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="#" class="logo">Tommy</a>
+    <nav class="nav">
+      <a href="#hero">Start</a>
+      <a href="#about">Über mich</a>
+      <a href="#contact">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO mit 3D-Animation -->
+    <section id="hero" class="hero">
+      <!-- Spline 3D-Animation -->
+      <div class="hero__spline" aria-hidden="true">
+        <iframe
+          src="https://my.spline.design/radialglass-JBxQGDRcUTfjgOgQwn7PtyAg/"
+          frameborder="0"
+          width="100%"
+          height="100%"
+          title="3D Radial Glass Animation"
+          loading="eager"
+          allow="autoplay; fullscreen"></iframe>
+      </div>
+
+      <!-- Inhalt über der Animation -->
+      <div class="hero__content">
+        <p class="hero__eyebrow">Willkommen</p>
+        <h1 class="hero__title">Hi, ich bin <span>Tommy</span></h1>
+        <p class="hero__subtitle">
+          Kreative Ideen, sauberes Design und ein Hauch von 3D.
+        </p>
+        <div class="hero__actions">
+          <a href="#about" class="btn btn--primary">Mehr erfahren</a>
+          <a href="#contact" class="btn btn--ghost">Kontakt</a>
+        </div>
+      </div>
+
+      <div class="hero__scroll" aria-hidden="true">
+        <span></span>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <h2>Über mich</h2>
+      <p>
+        Hier kommt ein kurzer Text über Tommy. Dieser Bereich kann frei
+        angepasst werden — füge deine eigenen Inhalte, Projekte oder Skills hinzu.
+      </p>
+    </section>
+
+    <section id="contact" class="section section--contact">
+      <h2>Kontakt</h2>
+      <p>Lust auf ein Projekt? Schreib mir gerne.</p>
+      <a href="mailto:hello@example.com" class="btn btn--primary">E-Mail senden</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Tommy. Alle Rechte vorbehalten.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
